@@ -110,7 +110,10 @@ class Game extends React.Component{
                 squares: Array(9).fill(null)
               }
             ],
-            ch:false
+            ch:false,
+            xIsNext: true,
+            stepNo:0,
+            winline:Array(3).fill(null),
           })
       }
        onchange(event) {
