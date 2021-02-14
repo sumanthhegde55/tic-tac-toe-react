@@ -1,6 +1,9 @@
 * {
     box-sizing: border-box;
   }
+  body, html {
+    height: 100%;
+  }
 .grid
 {
   position: relative;
@@ -149,9 +152,6 @@
     right:-25%;
     top:5rem;
   }
-  /* .body{
-    color:red;
-  } */
   .info >.infoname,.info2>.infoname{
     background:linear-gradient(lightgreen,yellow);
     font-weight: bold;
@@ -160,4 +160,11 @@
     margin-right:4px;
     margin-left:4px;
     padding:0 4px;
+  }
+  html { 
+    background: url(tic.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
   }

@@ -99,7 +99,8 @@ class Game extends React.Component{
               }
               else{
                 this.setState({
-                    sub:"finished"
+                    sub:"finished",
+                    name2:"Computer"
                 })
               }
           }
@@ -115,6 +116,9 @@ class Game extends React.Component{
         let name=((winner.winner===mysymb)?name1:name2)
         if(winner.winner===null && winner.cnt!==9){
             name=(this.state.xIsNext?name1:name2)
+        }
+        if(winner.winner==null && winner.cnt===9){
+            name=""
         }
         let info=(winner.winner!==null)?
         'The winner is: ':(winner.cnt===9)?"Drawed Game!":"Next turn by: "
@@ -204,10 +208,10 @@ class Game extends React.Component{
                      <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
                      <div className="grid-info">
                      <div className="info">{info} 
-                        <span 
+                        {name!==""?<span 
                         className="infoname"
                         >{name}
-                        </span> 
+                        </span>:(<div></div>)}
                         And the symbol is: 
                         <span className="infoname">
                         {this.state.xIsNext?this.state.mysymb:this.state.oppsymb}
@@ -224,10 +228,10 @@ class Game extends React.Component{
                     <div>
                         <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
                         <div className="info2">{info}
-                        <span 
+                        {name!==""?<span 
                         className="infoname"
                         >{name}
-                        </span>
+                        </span>:(<div></div>)}
                         </div> 
                         <button className="playAgain" onClick={()=>this.playAgain()}>Play Again!</button>
                     </div>
