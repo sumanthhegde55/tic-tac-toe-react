@@ -1,7 +1,6 @@
 * {
     box-sizing: border-box;
   }
-
 .grid
 {
   position: relative;
@@ -73,13 +72,20 @@
       cursor: pointer;
       border:none;
       background-color:rebeccapurple;
-      font-size: 3.4em;
+      font-size: 1.5em;
       padding: 3% 6%;
       margin: 0 4%;  
   }
   .info{
     display: inline;
     margin-right:1rem;
+    background-color:rgb(224, 160, 107);
+    color:black;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    padding: 1rem;
+    margin-top:1rem;
   }
 .restart{
     /* position: absolute; */
@@ -105,14 +111,13 @@
     padding: 1rem;
     margin-top:1rem;
   }
-  .info2{
+ .info2{
     width:140px;
     position: relative;
     background-color: #4CAF50;
     color: white;
     text-align: center;
     border: none;
-    cursor: pointer;
     left:45%;
     top:1rem;
     font-size: 1rem;
@@ -134,5 +139,24 @@
      background-color: darkkhaki;
   }
   .nameDisplay{
+    position: relative;
+    width:50%;
     text-align: center;
+    background-color:lightblue;
+    padding:0 0 1rem 0;
+    border: 0.5rem solid #2c3e50;
+    right:-25%;
+    top:5rem;
+  }
+  /* .body{
+    color:red;
+  } */
+  .info >.infoname{
+    background:linear-gradient(lightgreen,yellow);
+    font-weight: bold;
+    font-size:1.5rem;
+    color:firebrick;
+    margin-right:4px;
+    margin-left:4px;
+    padding:0 4px;
   }

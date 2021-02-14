@@ -69,7 +69,8 @@ class Game extends React.Component{
             history: [{
                 squares: Array(9).fill(null)
               }],
-              sub:""
+              sub:"",
+              enem:""
           })
       }
        onchange(event) {
@@ -78,18 +79,30 @@ class Game extends React.Component{
             [name]: value
         })
        }
-       submitf(e){
+       submitf(e,x){
            e.preventDefault()
            const n1=this.state.name1
            const n2=this.state.name2
-           if(n1==0 || n2==0){
-               alert("Both fields are must to proceed!")
-           }
-           else{
-               this.setState({
-                sub:"finished"
-               })
-           }
+          if(x=='H'){
+              if(n1==="" || n2===""){
+                  alert("Both names are required for 2 player mode!")
+              }
+              else{
+                  this.setState({
+                      sub:"finished"
+                  })
+              }
+          }
+          else{
+              if(n1==''){
+                  alert("Name of player is required to play!")
+              }
+              else{
+                this.setState({
+                    sub:"finished"
+                })
+              }
+          }
        }
     render(){
         const history = this.state.history.slice(0,this.state.stepNo+1);
@@ -99,10 +112,12 @@ class Game extends React.Component{
         const name2=this.state.name2
         const mysymb=this.state.mysymb
         const opp=this.state.oppsymb
-        const name=((winner.winner===mysymb)?name1:name2)
+        let name=((winner.winner===mysymb)?name1:name2)
+        if(winner.winner===null && winner.cnt!==9){
+            name=(this.state.xIsNext?name1:name2)
+        }
         let info=(winner.winner!==null)?
-        'The winner is: ' + name
-        :(winner.cnt===9)?"Drawed Game!":"Next turn by: " +(this.state.xIsNext?name1:name2) + " And symbol is : " + (this.state.xIsNext?mysymb:opp);
+        'The winner is: ':(winner.cnt===9)?"Drawed Game!":"Next turn by: "
         const prevMoves= history.map((no,move)=>{
             const exp="Go to step #" +move;
             if(move){ 
@@ -123,9 +138,33 @@ class Game extends React.Component{
     return(
         <div>
              {
+           enemy===""?
+           (<div>
+                <div className="nameDisplay">
+                <h1>TIC-TAC-TOE</h1>
+                <div className="entry">
+                        <h2>Select Opponent:</h2>
+                        <button onClick={()=>this.handleEnemy(0)}>Human</button>
+                        <button onClick={()=>this.handleEnemy(1)}>Computer</button>
+                   </div>
+           </div>
+               </div>)
+            :
+            symb===''?(
+            <div className="nameDisplay">
+                 <div className="entry">
+                         <h1>Player 1 symbol:</h1>
+                         <button onClick={()=>this.handleStart(0)}>X</button>
+                         <button onClick={()=>this.handleStart(1)}>O</button>
+                    </div>
+            </div>
+            )
+            :
             sub===""?(
                 <div className="nameDisplay">
-                    <h1>Enter Names of Players</h1>
+                    <div>
+                    </div>   
+                   {enemy==='H'?<h2>Enter Names of Players</h2> :<h2>Enter Names of Player</h2> }
                     <form>
                     <label>First name : 
                     <input
@@ -134,48 +173,28 @@ class Game extends React.Component{
                     value={this.state.name1}
                     onChange={this.onchange}
                     className="form"
-                    required
                     />
                     </label>
                     <br/><br/>
-                    <label>Second name : 
+                   { enemy==='H'?
+                   <div>
+                        <label>Second name : 
                         <input
                         type="text"
                         name="name2"
                         value={this.state.name2}
                         onChange={this.onchange}
                         className="form"
-                        required 
                         />
                     </label>
                     <br/><br/>
+                   </div>:(<div></div>)}
                     <button type="submit" className="displayName"
-                    onClick={(e)=>this.submitf(e)}
+                    onClick={(e)=>this.submitf(e,this.state.enem)}
                     >Submit</button>
                     </form>
                 </div>
             )     
-            :
-            symb===''?(
-            <div>
-                 <div className="entry">
-                         <h1>Select symbol</h1>
-                         <button onClick={()=>this.handleStart(0)}>X</button>
-                         <button onClick={()=>this.handleStart(1)}>O</button>
-                    </div>
-            </div>
-            )
-            :
-            enemy===""?
-            (<div>
-                 <div>
-                 <div className="entry">
-                         <h1>Select Opponent</h1>
-                         <button onClick={()=>this.handleEnemy(0)}>Human</button>
-                         <button onClick={()=>this.handleEnemy(1)}>Computer</button>
-                    </div>
-            </div>
-                </div>)
             :
             <div>
              <div>
@@ -184,7 +203,16 @@ class Game extends React.Component{
                      <div>
                      <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
                      <div className="grid-info">
-                     <div className="info">{info}</div>
+                     <div className="info">{info} 
+                        <span 
+                        className="infoname"
+                        >{name}
+                        </span> 
+                        And the symbol is: 
+                        <span className="infoname">
+                        {this.state.xIsNext?this.state.mysymb:this.state.oppsymb}
+                            </span>
+                     </div>
                      <button class="restart" onClick={()=>this.playAgain()}>Restart</button>
                      <div className="dropdown">
                         <button class="dropbtn">Past Moves</button>
