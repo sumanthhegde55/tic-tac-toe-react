@@ -223,7 +223,12 @@ class Game extends React.Component{
                     :
                     <div>
                         <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
-                        <div className="info2">{info}</div>
+                        <div className="info2">{info}
+                        <span 
+                        className="infoname"
+                        >{name}
+                        </span>
+                        </div> 
                         <button className="playAgain" onClick={()=>this.playAgain()}>Play Again!</button>
                     </div>
                     }

@@ -114,8 +114,9 @@
  .info2{
     width:140px;
     position: relative;
-    background-color: #4CAF50;
-    color: white;
+    background-color: rgb(224, 160, 107);
+    color: black;
+    font-weight: bold;
     text-align: center;
     border: none;
     left:45%;
@@ -151,7 +152,7 @@
   /* .body{
     color:red;
   } */
-  .info >.infoname{
+  .info >.infoname,.info2>.infoname{
     background:linear-gradient(lightgreen,yellow);
     font-weight: bold;
     font-size:1.5rem;
