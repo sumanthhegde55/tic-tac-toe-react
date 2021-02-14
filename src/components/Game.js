@@ -13,7 +13,8 @@ class Game extends React.Component{
           xIsNext: true,
           stepNo:0,
           winline:Array(3).fill(null),
-          mysymb:""
+          mysymb:"",
+          enem:""
         };
       }
       jump(step){
@@ -52,6 +53,16 @@ class Game extends React.Component{
             })
         }
       }
+      handleEnemy(i){
+        i===0?this.setState({enem:'H'}):this.setState({enem:'C'})
+      }
+      playAgain(){
+          this.setState({
+            history: [{
+                squares: Array(9).fill(null)
+              }]
+          })
+      }
     render(){
         const history = this.state.history.slice(0,this.state.stepNo+1);
         const current = history[history.length - 1];
@@ -67,7 +78,11 @@ class Game extends React.Component{
                 </li>
             )
         })
-        let symb=this.state.mysymb
+        const symb=this.state.mysymb
+        const enemy=this.state.enem
+        if(winner.winner!==null){
+            alert("THE WINNER IS " + winner.winner + '!')
+        }
     return(
         <div>
              {
@@ -81,12 +96,24 @@ class Game extends React.Component{
             </div>
             )
             :
+            enemy===""?
+            (<div>
+                 <div>
+                 <div className="entry">
+                         <h1>Select Opponent</h1>
+                         <button onClick={()=>this.handleEnemy(0)}>Human</button>
+                         <button onClick={()=>this.handleEnemy(1)}>Computer</button>
+                    </div>
+            </div>
+                </div>)
+            :
             <div>
              <div>
                  <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
              </div>
             <div className="grid-info">
                <div className="info">{info}</div>
+               <button className="playAgain" onClick={()=>this.playAgain()}>Play Again!</button>
                <div className="dropdown">
                   <button class="dropbtn">Past Moves</button>
                   <ol className="list">{prevMoves}</ol> 
