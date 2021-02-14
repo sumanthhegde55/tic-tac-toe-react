@@ -33,7 +33,7 @@ class Game extends React.Component{
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         const opp=this.state.oppsymb
-        console.log(squares)
+        // console.log(squares)
         if (checkwin(squares).winner!==null || squares[i]) {
           return;
         }
@@ -61,7 +61,7 @@ class Game extends React.Component{
                 stepNo:history.length,
                 xIsNext:!this.state.xIsNext
               });
-              console.log("computer has moved")
+            //   console.log("computer has moved")
             }.bind(this)
             ,1000);
         }
