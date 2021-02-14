@@ -17,7 +17,8 @@ class Game extends React.Component{
           enem:"",
           name1:"",
           name2:"",
-          sub:""
+          sub:"",
+          ch:false
         };
         this.onchange = this.onchange.bind(this)
         this.submitf = this.submitf.bind(this)
@@ -33,20 +34,22 @@ class Game extends React.Component{
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         const opp=this.state.oppsymb
-        // console.log(squares)
+        // console.log(this.state.ch)
         if (checkwin(squares).winner!==null || squares[i]) {
           return;
         }
-        squares[i] = this.state.xIsNext ? this.state.mysymb: opp;
+       if(this.state.ch===false){
+           squares[i] = this.state.xIsNext ? this.state.mysymb: opp;
         this.setState({
             history: history.concat([{
               squares: squares
             }]),
             stepNo:history.length,
-            xIsNext:!this.state.xIsNext
+            xIsNext:!this.state.xIsNext,
           });
           if (checkwin(squares).winner!==null) {return;}
         if(this.state.enem==='C'){
+            this.setState({ch:!this.state.ch})
             let randomNumber=0
             while(true){
                 randomNumber=Math.floor(Math.random()*9)
@@ -59,12 +62,14 @@ class Game extends React.Component{
                   squares: squares
                 }]),
                 stepNo:history.length,
-                xIsNext:!this.state.xIsNext
+                xIsNext:!this.state.xIsNext,
+                ch:!this.state.ch
               });
             //   console.log("computer has moved")
             }.bind(this)
             ,1000);
         }
+    }
       }
       handleStart(i){
         if(i){
@@ -95,7 +100,8 @@ class Game extends React.Component{
               mysymb:"",
               oppsymb:"",
               enem:"",
-              sub:""
+              sub:"",
+              ch:false
           })
       }
       restart(){
@@ -103,7 +109,8 @@ class Game extends React.Component{
             history: [{
                 squares: Array(9).fill(null)
               }
-            ]
+            ],
+            ch:false
           })
       }
        onchange(event) {
@@ -247,6 +254,7 @@ class Game extends React.Component{
                             </span>
                      </div>
                      <button class="restart" onClick={()=>this.restart()}>Restart</button>
+                     <button class="restart" onClick={()=>this.playAgain()}>Quit Game</button>
                      <div className="dropdown">
                         <button class="dropbtn">Past Moves</button>
                         <ol className="list">{prevMoves}</ol> 
