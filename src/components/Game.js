@@ -1,4 +1,3 @@
-
 import React from 'react'
 import Board from "./Board"
 import "../style.css"
@@ -33,29 +32,49 @@ class Game extends React.Component{
         const history = this.state.history.slice(0,this.state.stepNo+1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
+        const opp=this.state.oppsymb
+        console.log(squares)
         if (checkwin(squares).winner!==null || squares[i]) {
           return;
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = this.state.xIsNext ? this.state.mysymb: opp;
         this.setState({
-          history: history.concat([{
-            squares: squares
-          }]),
-          xIsNext: !this.state.xIsNext,
-          stepNo:history.length,
-        });
+            history: history.concat([{
+              squares: squares
+            }]),
+            stepNo:history.length,
+            xIsNext:!this.state.xIsNext
+          });
+          if (checkwin(squares).winner!==null) {return;}
+        if(this.state.enem==='C'){
+            let randomNumber=0
+            while(true){
+                randomNumber=Math.floor(Math.random()*9)
+                if(squares[randomNumber]===null) break;
+            }
+            setTimeout(function(){
+                squares[randomNumber]=opp;
+                this.setState({
+                history: history.concat([{
+                  squares: squares
+                }]),
+                stepNo:history.length,
+                xIsNext:!this.state.xIsNext
+              });
+              console.log("computer has moved")
+            }.bind(this)
+            ,1000);
+        }
       }
       handleStart(i){
         if(i){
             this.setState({
-                xIsNext:false,
                 mysymb:'O',
                 oppsymb:'X'
             })
         }
         else{
             this.setState({
-                xIsNext:true,
                 mysymb:'X',
                 oppsymb:'O'
             })
@@ -68,9 +87,23 @@ class Game extends React.Component{
           this.setState({
             history: [{
                 squares: Array(9).fill(null)
-              }],
-              sub:"",
-              enem:""
+              }
+            ],
+              xIsNext: true,
+              stepNo:0,
+              winline:Array(3).fill(null),
+              mysymb:"",
+              oppsymb:"",
+              enem:"",
+              sub:""
+          })
+      }
+      restart(){
+        this.setState({
+            history: [{
+                squares: Array(9).fill(null)
+              }
+            ]
           })
       }
        onchange(event) {
@@ -135,10 +168,6 @@ class Game extends React.Component{
         const symb=this.state.mysymb
         const enemy=this.state.enem
         const sub=this.state.sub
-        if(winner.winner!==null){
-            alert("The winner is " + name + '!')
-        }
-        console.log(this.state.sub)
     return(
         <div>
              {
@@ -217,7 +246,7 @@ class Game extends React.Component{
                         {this.state.xIsNext?this.state.mysymb:this.state.oppsymb}
                             </span>
                      </div>
-                     <button class="restart" onClick={()=>this.playAgain()}>Restart</button>
+                     <button class="restart" onClick={()=>this.restart()}>Restart</button>
                      <div className="dropdown">
                         <button class="dropbtn">Past Moves</button>
                         <ol className="list">{prevMoves}</ol> 
