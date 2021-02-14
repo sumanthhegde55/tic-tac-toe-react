@@ -4,6 +4,7 @@
 
 .grid
 {
+  position: relative;
     width: 70vw;
     height: 70vh;
 	margin: 0 auto;
@@ -78,7 +79,43 @@
   }
   .info{
     display: inline;
+    margin-right:1rem;
+  }
+.restart{
+    /* position: absolute; */
+    margin:0 1rem;
+    background-color: #4CAF50;
+    color: white;
+    margin-top:1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
   }
   .playAgain{
-    margin:0 1rem;
+    position: relative;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    left:45%;
+    top:2rem;
+    font-size: 1rem;
+    padding: 1rem;
+    margin-top:1rem;
+  }
+  .info2{
+    width:140px;
+    position: relative;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    left:45%;
+    top:1rem;
+    font-size: 1rem;
+    padding: 1rem;
+    margin-top:1rem;
   }

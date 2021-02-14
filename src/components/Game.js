@@ -69,20 +69,23 @@ class Game extends React.Component{
         const winner=checkwin(current.squares)
         let info=(winner.winner!==null)?
         'The winner is: ' + winner.winner 
-        :(winner.cnt===9)?"Game is a Draw! Play Again!":"Next turn by: " +(this.state.xIsNext?'X':'O');
+        :(winner.cnt===9)?"Drawed Game!":"Next turn by: " +(this.state.xIsNext?'X':'O');
         const prevMoves= history.map((no,move)=>{
-            const exp=move?"Go to step #" +move : "Go to starting move"; 
+            const exp="Go to step #" +move;
+            if(move){ 
             return(
                 <li>
                     <button onClick={() => this.jump(move)}>{exp}</button>
                 </li>
             )
+            }
         })
         const symb=this.state.mysymb
         const enemy=this.state.enem
         if(winner.winner!==null){
             alert("THE WINNER IS " + winner.winner + '!')
         }
+        console.log(winner)
     return(
         <div>
              {
@@ -109,16 +112,27 @@ class Game extends React.Component{
             :
             <div>
              <div>
-                 <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
+                 {
+                     (winner.winner===null && winner.cnt!==9)?
+                     <div>
+                     <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
+                     <div className="grid-info">
+                     <div className="info">{info}</div>
+                     <button class="restart" onClick={()=>this.playAgain()}>Restart</button>
+                     <div className="dropdown">
+                        <button class="dropbtn">Past Moves</button>
+                        <ol className="list">{prevMoves}</ol> 
+                     </div>
+                  </div>
+                  </div>
+                    :
+                    <div>
+                        <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
+                        <div className="info2">{info}</div>
+                        <button className="playAgain" onClick={()=>this.playAgain()}>Play Again!</button>
+                    </div>
+                    }
              </div>
-            <div className="grid-info">
-               <div className="info">{info}</div>
-               <button className="playAgain" onClick={()=>this.playAgain()}>Play Again!</button>
-               <div className="dropdown">
-                  <button class="dropbtn">Past Moves</button>
-                  <ol className="list">{prevMoves}</ol> 
-               </div>
-            </div>
          </div>
         }
         </div>
@@ -137,6 +151,10 @@ function checkwin(squares){
         [0,4,8],
         [2,4,6]
     ]
+    let cnt=0
+    for(let i=0;i<9;i++){
+        if(squares[i]!==null) cnt+=1
+    }
     for(let i=0;i<win.length;i++){
         f=true;
         for(let j=1;j<win[0].length;j++){
@@ -145,11 +163,7 @@ function checkwin(squares){
                 break
             }
         }
-        if(f && squares[win[i][0]]!==null) return {winner:squares[win[i][0]], line:win[i],cnt:null};
-    }
-    let cnt=0
-    for(let i=0;i<9;i++){
-        if(squares[i]!==null) cnt+=1
+        if(f && squares[win[i][0]]!==null) return {winner:squares[win[i][0]], line:win[i],cnt:cnt};
     }
     return {winner:null,line:null,cnt:cnt};
 }
