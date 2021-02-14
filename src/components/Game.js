@@ -14,8 +14,14 @@ class Game extends React.Component{
           stepNo:0,
           winline:Array(3).fill(null),
           mysymb:"",
-          enem:""
+          oppsymb:"",
+          enem:"",
+          name1:"",
+          name2:"",
+          sub:""
         };
+        this.onchange = this.onchange.bind(this)
+        this.submitf = this.submitf.bind(this)
       }
       jump(step){
             this.setState({
@@ -43,13 +49,15 @@ class Game extends React.Component{
         if(i){
             this.setState({
                 xIsNext:false,
-                mysymb:'O'
+                mysymb:'O',
+                oppsymb:'X'
             })
         }
         else{
             this.setState({
                 xIsNext:true,
-                mysymb:'X'
+                mysymb:'X',
+                oppsymb:'O'
             })
         }
       }
@@ -60,16 +68,41 @@ class Game extends React.Component{
           this.setState({
             history: [{
                 squares: Array(9).fill(null)
-              }]
+              }],
+              sub:""
           })
       }
+       onchange(event) {
+        const {name, value} = event.target
+        this.setState({
+            [name]: value
+        })
+       }
+       submitf(e){
+           e.preventDefault()
+           const n1=this.state.name1
+           const n2=this.state.name2
+           if(n1==0 || n2==0){
+               alert("Both fields are must to proceed!")
+           }
+           else{
+               this.setState({
+                sub:"finished"
+               })
+           }
+       }
     render(){
         const history = this.state.history.slice(0,this.state.stepNo+1);
         const current = history[history.length - 1];
         const winner=checkwin(current.squares)
+        const name1=this.state.name1
+        const name2=this.state.name2
+        const mysymb=this.state.mysymb
+        const opp=this.state.oppsymb
+        const name=((winner.winner===mysymb)?name1:name2)
         let info=(winner.winner!==null)?
-        'The winner is: ' + winner.winner 
-        :(winner.cnt===9)?"Drawed Game!":"Next turn by: " +(this.state.xIsNext?'X':'O');
+        'The winner is: ' + name
+        :(winner.cnt===9)?"Drawed Game!":"Next turn by: " +(this.state.xIsNext?name1:name2) + " And symbol is : " + (this.state.xIsNext?mysymb:opp);
         const prevMoves= history.map((no,move)=>{
             const exp="Go to step #" +move;
             if(move){ 
@@ -82,13 +115,47 @@ class Game extends React.Component{
         })
         const symb=this.state.mysymb
         const enemy=this.state.enem
+        const sub=this.state.sub
         if(winner.winner!==null){
-            alert("THE WINNER IS " + winner.winner + '!')
+            alert("The winner is " + name + '!')
         }
-        console.log(winner)
+        console.log(this.state.sub)
     return(
         <div>
              {
+            sub===""?(
+                <div className="nameDisplay">
+                    <h1>Enter Names of Players</h1>
+                    <form>
+                    <label>First name : 
+                    <input
+                    type="text"
+                    name="name1"
+                    value={this.state.name1}
+                    onChange={this.onchange}
+                    className="form"
+                    required
+                    />
+                    </label>
+                    <br/><br/>
+                    <label>Second name : 
+                        <input
+                        type="text"
+                        name="name2"
+                        value={this.state.name2}
+                        onChange={this.onchange}
+                        className="form"
+                        required 
+                        />
+                    </label>
+                    <br/><br/>
+                    <button type="submit" className="displayName"
+                    onClick={(e)=>this.submitf(e)}
+                    >Submit</button>
+                    </form>
+                </div>
+            )     
+            :
             symb===''?(
             <div>
                  <div className="entry">
