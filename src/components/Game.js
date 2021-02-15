@@ -18,7 +18,9 @@ class Game extends React.Component{
           name1:"",
           name2:"",
           sub:"",
-          ch:false
+          ch:false,
+          score1:0,
+          score2:0
         };
         this.onchange = this.onchange.bind(this)
         this.submitf = this.submitf.bind(this)
@@ -69,6 +71,7 @@ class Game extends React.Component{
             }.bind(this)
             ,1000);
         }
+
     }
       }
       handleStart(i){
@@ -88,7 +91,7 @@ class Game extends React.Component{
       handleEnemy(i){
         i===0?this.setState({enem:'H'}):this.setState({enem:'C'})
       }
-      playAgain(){
+      quit(){
           this.setState({
             history: [{
                 squares: Array(9).fill(null)
@@ -101,7 +104,9 @@ class Game extends React.Component{
               oppsymb:"",
               enem:"",
               sub:"",
-              ch:false
+              ch:false,
+              score1:0,
+              score2:0
           })
       }
       restart(){
@@ -257,7 +262,7 @@ class Game extends React.Component{
                             </span>
                      </div>
                      <button class="restart" onClick={()=>this.restart()}>Restart</button>
-                     <button class="restart" onClick={()=>this.playAgain()}>Quit Game</button>
+                     <button class="restart" onClick={()=>this.quit()}>Quit Game</button>
                      <div className="dropdown">
                         <button class="dropbtn">Past Moves</button>
                         <ol className="list">{prevMoves}</ol> 
@@ -272,8 +277,11 @@ class Game extends React.Component{
                         className="infoname"
                         >{name}
                         </span>:(<div></div>)}
-                        </div> 
-                        <button className="playAgain" onClick={()=>this.playAgain()}>Play Again!</button>
+                        </div>
+                        <div className="restDiv">
+                        <button className="restart2" onClick={()=>this.restart()}>Play Again!</button>
+                        <button className="restart3" onClick={()=>this.quit()}>Quit Game</button>
+                        </div>
                     </div>
                     }
              </div>
