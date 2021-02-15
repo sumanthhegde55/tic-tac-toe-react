@@ -20,7 +20,9 @@ class Game extends React.Component{
           sub:"",
           ch:false,
           score1:0,
-          score2:0
+          score2:0,
+          tie:0,
+          f:1
         };
         this.onchange = this.onchange.bind(this)
         this.submitf = this.submitf.bind(this)
@@ -32,48 +34,47 @@ class Game extends React.Component{
             })
       }
       handleClick(i) {
-        const history = this.state.history.slice(0,this.state.stepNo+1);
-        const current = history[history.length - 1];
-        const squares = current.squares.slice();
-        const opp=this.state.oppsymb
-        // console.log(this.state.ch)
-        if (checkwin(squares).winner!==null || squares[i]) {
+         const history = this.state.history.slice(0,this.state.stepNo+1);
+         const current = history[history.length - 1];
+         const squares = current.squares.slice();
+         const opp=this.state.oppsymb
+         if (checkwin(squares).winner!==null || squares[i]) {
           return;
-        }
-       if(this.state.ch===false){
-           squares[i] = this.state.xIsNext ? this.state.mysymb: opp;
-        this.setState({
-            history: history.concat([{
-              squares: squares
-            }]),
-            stepNo:history.length,
-            xIsNext:!this.state.xIsNext,
-          });
-          if (checkwin(squares).winner!==null) {return;}
-        if(this.state.enem==='C'){
-            this.setState({ch:!this.state.ch})
-            let randomNumber=0
-            while(true){
-                randomNumber=Math.floor(Math.random()*9)
-                if(squares[randomNumber]===null) break;
-            }
-            setTimeout(function(){
-                squares[randomNumber]=opp;
-                this.setState({
-                history: history.concat([{
-                  squares: squares
-                }]),
-                stepNo:history.length,
-                xIsNext:!this.state.xIsNext,
-                ch:!this.state.ch
-              });
+         }
+         if(this.state.ch===false){
+            squares[i] = this.state.xIsNext ? this.state.mysymb: opp;
+            this.setState({
+              history: history.concat([{
+                 squares: squares
+              }]),
+              stepNo:history.length,
+              xIsNext:!this.state.xIsNext,
+             });
+             if (checkwin(squares).winner!==null) {return;}
+             if(this.state.enem==='C'){
+                  this.setState({ch:!this.state.ch})
+                  let randomNumber=0
+                  while(true){
+                     randomNumber=Math.floor(Math.random()*9)
+                     if(squares[randomNumber]===null) break;
+                  }
+                  setTimeout(function(){
+                      squares[randomNumber]=opp;
+                      this.setState({
+                         history: history.concat([{
+                         squares: squares
+                         }]),
+                         stepNo:history.length,
+                         xIsNext:!this.state.xIsNext,
+                         ch:!this.state.ch
+                      });
             //   console.log("computer has moved")
-            }.bind(this)
-            ,1000);
-        }
-
-    }
+                  }.bind(this)
+                  ,1000);
+              }
+         }
       }
+
       handleStart(i){
         if(i){
             this.setState({
@@ -106,7 +107,9 @@ class Game extends React.Component{
               sub:"",
               ch:false,
               score1:0,
-              score2:0
+              score2:0,
+              tie:0,
+              f:1
           })
       }
       restart(){
@@ -119,6 +122,7 @@ class Game extends React.Component{
             xIsNext: true,
             stepNo:0,
             winline:Array(3).fill(null),
+            f:1
           })
       }
        onchange(event) {
@@ -161,12 +165,28 @@ class Game extends React.Component{
         const name2=this.state.name2
         const mysymb=this.state.mysymb
         const opp=this.state.oppsymb
+        const f=this.state.f
         let name=((winner.winner===mysymb)?name1:name2)
         if(winner.winner===null && winner.cnt!==9){
             name=(this.state.xIsNext?name1:name2)
         }
-        if(winner.winner==null && winner.cnt===9){
-            name=""
+        if(winner.winner===null && winner.cnt===9 && f){
+            this.setState({
+                f:0,
+                tie:this.state.tie+1
+            })
+        }
+        if(winner.winner===opp && f){
+            this.setState({
+                f:0,
+                score2:this.state.score2+1
+            })
+        }
+        if(winner.winner===mysymb && f){
+            this.setState({
+                f:0,
+                score1:this.state.score1+1
+            })
         }
         let info=(winner.winner!==null)?
         'The winner is: ':(winner.cnt===9)?"Drawed Game!":"Next turn by: "
@@ -183,6 +203,7 @@ class Game extends React.Component{
         const symb=this.state.mysymb
         const enemy=this.state.enem
         const sub=this.state.sub
+        console.log(this.state.tie,this.state.score1,this.state.score2)
     return(
         <div>
              {
@@ -249,6 +270,12 @@ class Game extends React.Component{
                  {
                      (winner.winner===null && winner.cnt!==9)?
                      <div>
+                           <div className="score">
+                            <h2>Score:</h2>
+                            <span className="scorenames">{name1}:{this.state.score1}</span>
+                            <span className="scorenames">{name2}:{this.state.score2}</span>
+                            <span className="scorenames">Tie:{this.state.tie}</span>
+                        </div>
                      <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
                      <div className="grid-info">
                      <div className="info">{info} 
@@ -261,16 +288,23 @@ class Game extends React.Component{
                         {this.state.xIsNext?this.state.mysymb:this.state.oppsymb}
                             </span>
                      </div>
-                     <button class="restart" onClick={()=>this.restart()}>Restart</button>
-                     <button class="restart" onClick={()=>this.quit()}>Quit Game</button>
+                     <button className="restart" onClick={()=>this.restart()}>Restart</button>
+                     <button className="restart" onClick={()=>this.quit()}>Quit Game</button>
                      <div className="dropdown">
-                        <button class="dropbtn">Past Moves</button>
+                        <button className="dropbtn">Past Moves</button>
                         <ol className="list">{prevMoves}</ol> 
                      </div>
                   </div>
                   </div>
                     :
                     <div>
+                          <div className="score">
+                            <h2>Score:</h2>
+                            <span className="scorenames">{name1}:
+                            {this.state.score1}</span>
+                            <span className="scorenames">{name2}:{this.state.score2}</span>
+                            <span className="scorenames">Tie:{this.state.tie}</span>
+                        </div>
                         <Board squares={current.squares} onClick={(i)=>this.handleClick(i)} winline={winner.line}/>
                         <div className="info2">{info}
                         {name!==""?<span 

@@ -192,3 +192,22 @@
     position: relative;
     top:1.5rem;
   }
+  .score{
+    background:#4CAF50;  ;
+    position: absolute;
+    top:10px;
+    left:10px;
+    max-width:10%;
+    object-fit: contain;
+    text-align: center;
+    padding-bottom: 0;
+    word-wrap: break-word
+  }
+  .scorenames{
+    object-fit: contain;
+    display: block;
+    background:linear-gradient(lightblue,yellow);
+    font-weight: bold;
+    font-size: 1rem;
+    padding:0.5rem;
+  }
