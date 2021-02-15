@@ -170,6 +170,7 @@ class Game extends React.Component{
         if(winner.winner===null && winner.cnt!==9){
             name=(this.state.xIsNext?name1:name2)
         }
+        if(winner.winner===null && winner.cnt===9) name="";
         if(winner.winner===null && winner.cnt===9 && f){
             this.setState({
                 f:0,
@@ -203,7 +204,7 @@ class Game extends React.Component{
         const symb=this.state.mysymb
         const enemy=this.state.enem
         const sub=this.state.sub
-        console.log(this.state.tie,this.state.score1,this.state.score2)
+        console.log(this.state.tie,this.state.score1,this.state.score2,name)
     return(
         <div>
              {
